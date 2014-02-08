@@ -53,6 +53,7 @@ module Example
           repo_langs = [];
           begin
             repo_url = "#{github_user.login}/#{repo_name}"
+            puts repo_url
             repo_langs = octokit_client.languages(repo_url)
           rescue Octokit::NotFound
               puts "Error retrieving languages for #{repo_url}"
