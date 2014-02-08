@@ -13,7 +13,8 @@
     var width = 960,
         height = 500,
         radius = Math.min(width, height) / 2,
-        labelRadius = 200;
+        labelRadius = 150,
+        transitionTime = 2000;
 
     var color = d3.scale.category20();
 
@@ -30,29 +31,44 @@
       .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-      data.forEach(function(d) {
-        d.count = +d.count;
-      });
+    data.forEach(function(d) {
+      d.count = +d.count;
+    });
 
-      var g = svg.selectAll(".arc")
-          .data(pie(data))
-        .enter().append("g")
-          .attr("class", "arc");
+    var g = svg.selectAll(".arc")
+      .data(pie(data))
+      .enter().append("g")
+        .attr("class", "arc");
 
-      g.append("path")
-          .attr("d", arc)
-          .style("fill", function(d) { return color(d.data.language); });
+    g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data.language); })
+      .transition()
+      .ease("elastic")
+      .duration(transitionTime)
+      .attrTween("d", tweenPie);
 
-      g.append("text")
-          .attr("transform", function(d) {
-            return "translate(" + 
-              ( (labelRadius - 12) * Math.sin( ((d.endAngle - d.startAngle) / 2) + d.startAngle ) ) +
-              ", " +
-              ( -1 * (labelRadius - 12) * Math.cos( ((d.endAngle - d.startAngle) / 2) + d.startAngle ) ) +
-            ")";
-           })
-          .style("text-anchor", "middle")
-          .text(function(d) { return d.data.language; });
+    g.append("text")
+      .attr("transform", function(d) {
+      return "translate(" + 
+        ( (labelRadius - 12) * Math.sin( ((d.endAngle - d.startAngle) / 2) + d.startAngle ) ) +
+        ", " +
+        ( -1 * (labelRadius - 12) * Math.cos( ((d.endAngle - d.startAngle) / 2) + d.startAngle ) ) + ")";})
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.data.language; })
+      .attr("font-size","14px")
+      .style("opacity", 0)
+      .transition()
+      .duration(transitionTime)
+      .style("opacity", 1);
+
+    function tweenPie(b) {
+      var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+      return function(t) { return arc(i(t)); };
+    }
+
+
+
     </script>
   </body>
 </html>
