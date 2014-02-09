@@ -3,6 +3,17 @@
 <html>
   <head>
   	<script src="http://d3js.org/d3.v3.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Jolly+Lodger' rel='stylesheet' type='text/css'>
+    <style>
+    
+    body { 
+      font-family: ‘Metrophobic’, Arial, serif; font-weight: 400; 
+    }
+    text {
+      font-size: 16px;     
+    }
+    
+    </style>
   </head>
   <body>
     <p>Contributions by language</p>
@@ -42,9 +53,9 @@
 
     g.append("path")
       .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.language); })
+      .style("fill", function(d) { return color(d.data.name); })
       .transition()
-      .ease("elastic")
+      .ease("bounce")
       .duration(transitionTime)
       .attrTween("d", tweenPie);
 
@@ -55,7 +66,7 @@
         ", " +
         ( -1 * (labelRadius - 12) * Math.cos( ((d.endAngle - d.startAngle) / 2) + d.startAngle ) ) + ")";})
       .style("text-anchor", "middle")
-      .text(function(d) { return d.data.language; })
+      .text(function(d) { return d.data.name; })
       .attr("font-size","14px")
       .style("opacity", 0)
       .transition()
@@ -66,9 +77,6 @@
       var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
       return function(t) { return arc(i(t)); };
     }
-
-
-
     </script>
   </body>
 </html>
