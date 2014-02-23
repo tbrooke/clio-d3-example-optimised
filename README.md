@@ -1,6 +1,9 @@
-basics-of-authentication
+basics-of-authentication-OPTIMISED
 ================
 
+This project is based off the official GitHub Rendering Data as Graphs guide but uses Typhoeus to make asynchronous HTTP API requests so greatly speads up the page load time of the D3 graphs.
+
+===
 This is the sample project built by following the "[Basics of Authentication][basics of auth]"
 guide on developer.github.com.
 
