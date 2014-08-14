@@ -5,9 +5,9 @@
 
   </head>
   <body>
-    <p>Well, well, well, <%= login %>!</p>
+    <p>Hello, <%= login %>!</p>
     <p>
-      <% if !email.nil? && !email.empty? %> It looks like your public email address is <%= email %>.
+      <% if !email.empty? %> It looks like your public email address is <%= email %>.
       <% else %> It looks like you don't have a public email. That's cool.
       <% end %>
     </p>
