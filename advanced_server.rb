@@ -2,9 +2,30 @@ require 'sinatra'
 require 'rest_client'
 require 'json'
 require 'typhoeus'
+require 'rubygems'
+require 'oauth2'
 
-CLIENT_ID = ENV['GH_BASIC_CLIENT_ID']
-CLIENT_SECRET = ENV['CLIENT_SECRET']
+CLIENT_ID = ENV['APP_KEY']
+CLIENT_SECRET = ENV['APP_SECRET']
+
+
+client_key = CLIENT_ID
+client_secret = CLIENT_SECRET
+client = OAuth2::Client.new(client_key, client_secret, :site => 'https://app.goclio.com/')
+
+client.auth_code.authorize_url(:redirect_uri => 'https://brookesons.fwd.wf:5000/callback')
+
+# Redirect user or paste in the browser
+# => "https://app.goclio.com/oauth/authorize?response_type=code&client_id=client_key&redirect_uri=http://yourapp.com/callback"
+
+# redirects to http://yourapp.com/callback?state=&code=secretcode
+# Use the code param below to get a token
+
+code = 'secretcode'
+token = client.auth_code.get_token(code, :redirect_uri => 'h/callback')
+access_token = token.token# => "WjR8HLdo847Z8kdfUtewJpCvkRX4JYLCIF2dUUul"
+# Save this value for future requests
+
 
 use Rack::Session::Cookie, :secret => rand.to_s()
 
@@ -21,10 +42,10 @@ get '/' do
     authenticate!
   else
     access_token = session[:access_token]
-    scopes = []
+   
 
     begin
-      auth_result = RestClient.get('https://api.github.com/user',
+      auth_result = RestClient.get('https://app.goclio.com/oauth/approval ',
                                    {:params => {:access_token => access_token},
                                     :accept => :json})
     rescue => e
